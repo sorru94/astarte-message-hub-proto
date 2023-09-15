@@ -16,7 +16,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Python build (and maybe publish)
+name: Python code generation
 
 on: [push, pull_request, create]
 
@@ -27,11 +27,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install protoc
       run: |
-        curl -LO $PB_REL/download/v22.2/protoc-22.2-linux-x86_64.zip
-        unzip protoc-22.2-linux-x86_64.zip -d $HOME/.local
+        curl -LO $PB_REL/download/v23.4/protoc-23.4-linux-x86_64.zip
+        unzip protoc-23.4-linux-x86_64.zip -d $HOME/.local
         echo "$HOME/.local/bin" >> $GITHUB_PATH
     - name: Install Python dependencies
       run: |
@@ -39,12 +39,23 @@ jobs:
         python3 -m pip install termcolor
         python3 -m pip install build
         python3 -m pip install grpclib protobuf
+    - name: Remove old code
+      run: (! test -d ./astarteplatform) || rm -r ./astarteplatform
+      working-directory: ./python
     - name: Generate code
       run: python3 ./protoc.py
       working-directory: ./python
     - name: Build distribution
       run: python3 -m build
       working-directory: ./python
+    # Commit the generated files only following a pull request merge
+    - name: Commit the generated files
+      if: contains( github.event.head_commit.message, 'Merge pull request ' )
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add ./python
+        git diff --staged --quiet || git commit -s -m "Generated Python code." && git push
     # Publish only on tags creation
     - name: Publish package
       if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'create'
