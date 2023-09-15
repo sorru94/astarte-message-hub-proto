@@ -18,7 +18,7 @@
 
 name: Static
 
-on: [push, pull_request, create]
+on: [push]
 
 jobs:
   static:
