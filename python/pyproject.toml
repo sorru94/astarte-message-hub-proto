@@ -23,7 +23,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "astarte_message_hub_proto"
 version = "0.0.1"
-dependencies = ["grpcio-tools"]
+dependencies = ["grpcio-tools", "termcolor"]
 
 [project.optional-dependencies]
 static = ["black", "pylint"]
