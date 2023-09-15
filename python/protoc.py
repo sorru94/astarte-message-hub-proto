@@ -69,5 +69,4 @@ def run_protoc(proto_root_fld: Path, out_fld: Path):
 
 if __name__ == "__main__":
     python_fld = Path(__file__).parent
-
     run_protoc(proto_root_fld=python_fld.parent.joinpath("proto"), out_fld=python_fld)
