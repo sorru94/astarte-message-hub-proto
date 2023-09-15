@@ -16,22 +16,28 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Static
+name: Python package publish
 
-on: [push]
+on:
+  create:
 
 jobs:
-  static:
+  build:
     runs-on: ubuntu-latest
-    name: Checks
     steps:
     - uses: actions/checkout@v4
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
-        python3 --version
         python3 -m pip install --upgrade pip
-        python3 -m pip install -e ./python[static]
-    - name: Linting
-      run: python3 -m pylint python/protoc.py
-    - name: Format check
-      run: python3 -m black -l 100 --diff --check python/protoc.py
+        python3 -m pip install build
+    - name: Build distribution
+      run: python3 -m build
+      working-directory: ./python
+    # Publish only on tags creation
+    - name: Publish package
+      if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'create'
+      uses: pypa/gh-action-pypi-publish@v1.8.10
+      with:
+        packages-dir: ./python/dist/
+        user: __token__
+        password: ${{ secrets.PIP_API_TOKEN }}
