@@ -21,7 +21,7 @@ name: Code generation
 on:
   push:
   pull_request:
-    types: [closed]
+    types: [merged]
 
 env:
   PB_REL: https://github.com/protocolbuffers/protobuf/releases
