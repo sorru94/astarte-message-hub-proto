@@ -27,7 +27,7 @@ env:
   PB_REL: https://github.com/protocolbuffers/protobuf/releases
 
 jobs:
-  build:
+  python-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -69,3 +69,31 @@ jobs:
     - name: Generate code
       run: python3 ./protoc.py "./../grpc/grpc_python_plugin"
       working-directory: ./python
+    - name: Archive generated files
+      if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-generated-code
+        path: ./python/astarteplatform
+  commit:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    needs: [python-build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove old Python code
+        run: |
+          (! test -d ./astarteplatform) || rm -r ./astarteplatform
+          mkdir astarteplatform
+        working-directory: ./python
+      - name: Download generated Python code
+        uses: actions/download-artifact@v3
+        with:
+          name: python-generated-code
+          path: ./python/astarteplatform
+      - name: Commit the generated Python code
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add ./python
+          git diff --staged --quiet || git commit -s -m "Generated Python code." && git push
