@@ -48,6 +48,7 @@ jobs:
       run: python3 ./protoc.py
       working-directory: ./python
     - uses: actions/upload-artifact@v3
+      if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
       with:
         name: gen-code-python
         path: ./python/astarteplatform
