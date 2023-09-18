@@ -47,11 +47,15 @@ jobs:
     - name: Generate code
       run: python3 ./protoc.py
       working-directory: ./python
+    - uses: actions/upload-artifact@v3
+      with:
+        name: gen-code-python
+        path: ./python/astarteplatform
     # Commit the generated files only following a pull request merge
-    - name: Commit the generated files
-      if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add ./python
-        git diff --staged --quiet || git commit -s -m "Generated Python code." && git push
+    # - name: Commit the generated files
+    #   if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    #   run: |
+    #     git config user.name github-actions
+    #     git config user.email github-actions@github.com
+    #     git add ./python
+    #     git diff --staged --quiet || git commit -s -m "Generated Python code." && git push
