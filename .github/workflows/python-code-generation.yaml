@@ -16,7 +16,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Code generation
+name: Python code generation
 
 on: [push]
 
@@ -66,31 +66,10 @@ jobs:
     - name: Generate code
       run: python3 ./protoc.py "./../grpc/grpc_python_plugin"
       working-directory: ./python
-    - name: Archive generated files
+    - name: Commit the generated Python code
       if: github.ref == 'refs/heads/master'
-      uses: actions/upload-artifact@v3
-      with:
-        name: python-generated-code
-        path: ./python/astarteplatform
-  commit:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    needs: [python-build]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Remove old Python code
-        run: |
-          (! test -d ./astarteplatform) || rm -r ./astarteplatform
-          mkdir astarteplatform
-        working-directory: ./python
-      - name: Download generated Python code
-        uses: actions/download-artifact@v3
-        with:
-          name: python-generated-code
-          path: ./python/astarteplatform
-      - name: Commit the generated Python code
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add ./python
-          git diff --staged --quiet || git commit -s -m "Generated Python code." && git push
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add ./python
+        git diff --staged --quiet || git commit -s -m "Generated Python code." && git push

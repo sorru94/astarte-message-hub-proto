@@ -16,7 +16,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Static
+name: Python static analysis
 
 on: [push]
 
