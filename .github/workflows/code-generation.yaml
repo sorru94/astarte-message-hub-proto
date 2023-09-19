@@ -18,10 +18,7 @@
 
 name: Code generation
 
-on:
-  push:
-  pull_request:
-    types: [closed]
+on: [push]
 
 env:
   PB_REL: https://github.com/protocolbuffers/protobuf/releases
@@ -70,14 +67,14 @@ jobs:
       run: python3 ./protoc.py "./../grpc/grpc_python_plugin"
       working-directory: ./python
     - name: Archive generated files
-      if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+      if: github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v3
       with:
         name: python-generated-code
         path: ./python/astarteplatform
   commit:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    if: github.ref == 'refs/heads/master'
     needs: [python-build]
     steps:
       - uses: actions/checkout@v4
