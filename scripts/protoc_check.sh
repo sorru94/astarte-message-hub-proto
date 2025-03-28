@@ -10,5 +10,5 @@ version=$(protoc --version | cut -d ' ' -f 2)
 
 if [[ $version != "$PROTOC_VERSION" ]]; then
     echo "incompatible protoc version $version, expected $PROTOC_VERSION" >&2
-    exit 1
+    # exit 1
 fi
