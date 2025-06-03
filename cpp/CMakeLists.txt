@@ -53,6 +53,11 @@ else()
 
     message(STATUS "Fetched gRPC source directory: ${grpc_SOURCE_DIR}")
 
+
+    message(STATUS "gRPC protoc executable: ${gRPC_PROTOBUF_PROTOC_EXECUTABLE}")
+    message(STATUS "gRPC C++ plugin executable: ${gRPC_CPP_PLUGIN_EXECUTABLE}")
+    message(STATUS "gRPC C++ library: ${gRPC_CPP}")
+
     set(_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
     set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
     set(_GRPC_CPP grpc++)
