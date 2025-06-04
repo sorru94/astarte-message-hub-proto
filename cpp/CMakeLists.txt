@@ -44,7 +44,7 @@ else()
     FetchContent_Declare(
       grpc
       GIT_REPOSITORY https://github.com/grpc/grpc.git
-      GIT_TAG        v1.58.3
+      GIT_TAG        v1.57.1
       GIT_SHALLOW    TRUE
       GIT_PROGRESS   TRUE
       GIT_CONFIG     fetch.parallel=0 submodule.fetchJobs=0
