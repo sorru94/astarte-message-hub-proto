@@ -21,8 +21,8 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # Project configuration
 option(ASTARTE_USE_SYSTEM_GRPC "Use system installed gRPC" OFF)
-set(DEFAULT_PROTOBUF_VERSION "29.0.0" CACHE STRING "Default version of protobuf.")
-set(DEFAULT_GRPC_VERSION "1.69.0" CACHE STRING "Default version of gRPC.")
+set(DEFAULT_PROTOBUF_VERSION "31.0.0" CACHE STRING "Default version of protobuf.")
+set(DEFAULT_GRPC_VERSION "1.73.1" CACHE STRING "Default version of gRPC.")
 
 if (ASTARTE_USE_SYSTEM_GRPC)
     if(NOT DEFINED ASTARTE_PROTOBUF_VERSION)
