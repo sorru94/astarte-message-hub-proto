@@ -37,3 +37,27 @@ Remember to link your target with the imported library:
 ```CMake
 target_link_libraries(app PRIVATE astarte_msghub_proto)
 ```
+
+## Build the library with conan
+
+Follow the steps as described below:
+### Install conan in a venv
+```
+sudo rm -r .venv
+python -m venv .venv
+source .venv/bin/activate
+```
+### Install the dependencies with Conan
+```
+cd cpp
+rm -r build/ CMakeUserPresets.json
+conan install . --output-folder=build --build=missing --settings=build_type=Debug
+```
+### Build the library
+```
+cd build
+source conanbuild.sh
+make .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake --build . --config Debug
+source deactivate_conanbuild.sh
+```
