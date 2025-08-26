@@ -46,6 +46,7 @@ Follow the steps as described below:
 sudo rm -r .venv
 python -m venv .venv
 source .venv/bin/activate
+pip install conan
 ```
 ### Install the dependencies with Conan
 ```
@@ -57,7 +58,7 @@ conan install . --output-folder=build --build=missing --settings=build_type=Debu
 ```
 cd build
 source conanbuild.sh
-make .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
 cmake --build . --config Debug
 source deactivate_conanbuild.sh
 ```
