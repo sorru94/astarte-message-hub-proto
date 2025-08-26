@@ -15,7 +15,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # Project configuration
-option(ASTARTE_USE_SYSTEM_GRPC "Use system installed gRPC" ON)
+option(ASTARTE_USE_SYSTEM_GRPC "Use system installed gRPC" OFF)
 
 if(NOT DEFINED ASTARTE_USE_SYSTEM_GRPC)
     set(DEFAULT_GRPC_VERSION "1.69.0" CACHE STRING "Default version of gRPC.")
@@ -36,6 +36,8 @@ if(MSVC)
 endif()
 
 if(ASTARTE_USE_SYSTEM_GRPC)
+    option(protobuf_MODULE_COMPATIBLE TRUE)
+
     # gRPC needs Threads
     find_package(Threads REQUIRED)
     find_package(gRPC CONFIG REQUIRED)
@@ -166,7 +168,7 @@ target_link_libraries(astarte_msghub_proto
         ${_PROTOBUF_LIBPROTOBUF}
 )
 
-# Add include directories for the generated headers and the protobuf library headers
+# Add include directories for the generated headers
 target_include_directories(astarte_msghub_proto
     PRIVATE
         "${_PROTO_GENERATED_OUTPUT_DIR}"
